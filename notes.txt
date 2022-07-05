@@ -1,0 +1,87 @@
+npm install create-react-app
+npx create-react-app disney-plus-clone 
+yarn start
+
+(1)header
+  div =3
+  nav --> a,img,span
+  profile image
+  
+  css
+
+(2)slider
+  react slick for make slider componenets 
+  https://react-slick.neostack.com/docs/get-started
+    install imageslider 
+    npm install react-slick --save 
+    npm install slick-carousel
+  
+  import css file
+    import "~slick-carousel/slick/slick.css"; 
+    import "~slick-carousel/slick/slick-theme.css";
+  
+  function img slider--> carousel--> wrap,a,img
+  css
+
+(3)viewver
+    import styled
+    function viewver--> container -->Wrap,img
+    css
+
+(4) Movies 
+    import styled
+    function movies --> contaier,Wrap,Imag
+    css
+
+(5) Details
+      
+//how to switch btw detail page and home page
+//react router dom
+//install react-router-dom
+in home
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+
+//in router tag --> header tag (always visible)--> header will not chnage but detils will chnage 
+//switch tage(always chnage) --> rout--> parth is deatil (import detail component)
+      
+
+(6)details 
+
+(7)login
+
+(8)Firebase
+
+    npm install firebase--> npm i firebase@8.2.3(+npm update).
+    npm install firebase-tools
+
+(9) home js ( feature-->movieSlice.js) /// for redux means showing data in movies 
+    
+    import {createSlice} from "@reduxjs/toolkit"
+
+    // Redux made up from 3 things 
+      Actions(create, deate , login/logout,set new movie ,lobby user in/out)-->call reducers 
+      Reducers(what takes action change the state)--> call state, 
+      State
+
+
+
+
+   //go to store.js and import that reducer
+   //go to the home.js 
+           home and Movies both share same store 
+                    home --> setmovies --> get movies inside the movies component
+                    to use reducer --> import {useDispatch} from "react-redux"
+                                   --> import {setMovies} from "../features/movie/movieslice"
+
+  // go to movies for same homejs
+
+          -->import {selectMovies} from "../features/movie/movieSlice"
+import {useSelector } from "react-redux"
+              --> grabe the movies 

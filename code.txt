@@ -1,0 +1,210 @@
+import React from 'react'
+import styled from 'styled-components'
+import {selectMovies} from "../features/movie/movieSlice"
+import {useSelector } from "react-redux"
+
+function Movies() {
+
+    const movies = useSelector (selectMovies);
+
+     //console.log("this is movie " , movies)--> shoqw in console
+     // what happend ? --> from Home componenet we grabe the data  from databas e and we dispatch the action used the redux to save movies inside store and in movie components grabe the store 
+     // add map loop and wrap movies 
+     return (
+    <Container>
+        <h4>Recommended for you</h4>
+        <Content>
+        
+            {movies && 
+                movies.map((movie)=>{
+
+                    <Wrap>
+                       <img src={movie.cardImg}/>
+                    </Wrap>
+
+                })
+            }
+
+            <Wrap>
+                <img src='https://m.media-amazon.com/images/M/MV5BMTcyOTc2OTA1Ml5BMl5BanBnXkFtZTcwOTI1MjkzOQ@@._V1_FMjpg_UX1000_.jpg'/>
+            </Wrap>
+
+            <Wrap>
+                <img src='https://m.media-amazon.com/images/M/MV5BM2E4MDc0NzAtODA0YS00NjU2LTg5YjQtMTM4NzkwODMzZmJkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg'/>
+            </Wrap>
+
+            <Wrap>
+                <img src='https://m.media-amazon.com/images/M/MV5BMTcyOTc2OTA1Ml5BMl5BanBnXkFtZTcwOTI1MjkzOQ@@._V1_FMjpg_UX1000_.jpg'/>
+            </Wrap>
+
+            <Wrap>
+                <img src='https://m.media-amazon.com/images/M/MV5BYmMxZWRiMTgtZjM0Ny00NDQxLWIxYWQtZDdlNDNkOTEzYTdlXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX1000_.jpg'/>
+            </Wrap>
+            <Wrap>
+                <img src='https://m.media-amazon.com/images/M/MV5BMDFlN2E5ODEtM2U4YS00YzBmLTlkYjItNjJmNzYyM2QxMTYxXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg'/>
+            </Wrap>
+            <Wrap>
+                <img src='https://m.media-amazon.com/images/M/MV5BMTcyOTc2OTA1Ml5BMl5BanBnXkFtZTcwOTI1MjkzOQ@@._V1_FMjpg_UX1000_.jpg'/>
+            </Wrap>
+           
+
+            <Wrap>
+                <img src='https://m.media-amazon.com/images/M/MV5BM2E4MDc0NzAtODA0YS00NjU2LTg5YjQtMTM4NzkwODMzZmJkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg'/>
+            </Wrap>
+            
+            <Wrap>
+                <img src='https://m.media-amazon.com/images/M/MV5BYmMxZWRiMTgtZjM0Ny00NDQxLWIxYWQtZDdlNDNkOTEzYTdlXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_FMjpg_UX1000_.jpg'/>
+            </Wrap>
+           
+
+
+            
+
+
+        </Content>
+    </Container>
+  )
+}
+
+export default Movies
+
+const Container = styled.div`
+
+    
+
+`
+
+const Content = styled.div`
+  display : grid;
+  grid-gap:25px;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+
+`
+const Wrap =styled.div`
+
+  border-radius:10px;
+  cursor:pointer;
+  overflow:hidden;
+  border : 3px solid rgba(249, 249, 249, 0.1);
+  box-shadow: rgb(0 0 0 / 69%) 0px 26px 30px -10px,
+  rgb(0 0 0 / 73%) 0px 16px 10px -10px;
+  transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
+
+   img{
+    width : 100%;
+    height :100%;
+    object-fit:cover;
+   }
+
+
+   &:hover {
+    transfrom : scale(1.05);
+    box-shadow: rgb(0 0 0 / 80%) 0px 40px 58px -16px,
+    rgb(0 0 0 / 72%) 0px 30px 22px -10px;
+    border-color:rgba(249,249,249,0.8);
+   }
+`
+
+MovieSlice
+
+import {createSlice} from "@reduxjs/toolkit"
+
+//at intial movies is empty
+const initialState ={
+    movies:[]
+}
+
+const movieSlice = createSlice({
+
+    name : "movie",
+    initialState,
+    reducers : {
+
+        setMovies : (state , action) =>{
+            state.movies = action.payload;
+        }
+    }
+})
+
+export const {setMovies} = movieSlice.actions;
+
+//export movies by selecting by state or id etc
+export const  selectMovies = (state)=> state.movie.movies;
+
+// call the store thet we have that reducer
+export default  movieSlice.reducer;
+
+
+
+
+
+
+
+Home
+
+
+import {useEffect} from 'react'
+import React from 'react'
+import styled from 'styled-components'
+import ImgSlider from './ImgSlider'
+import Viewers from './Viewers'
+import Movies from './Movies'
+import db from '../firebase'
+import {useDispatch} from "react-redux"
+import { setMovies } from "../features/movie/movieSlice";
+
+function Home() {
+
+  //dispatch in action call setmovies  for the whole store or whole database 
+  const dispatch  = useDispatch();
+
+      useEffect(()=>{
+        db.collection("movies").onSnapshot((snapshot=>{
+
+          //capture all data of firebash of docs in tempMovies by maping(loop thorugh every single snapshot)
+          let tempMovies = snapshot.docs.map((doc)=>{
+                    
+               //return all data from doc object from firebase like movies data and with details like id etc
+               return { id: doc.id, ...doc.data()}
+          })
+           dispatch(setMovies(tempMovies));
+
+        }))
+
+      },[])
+
+
+  return (
+    <Container>
+        <ImgSlider/>
+        <Viewers/>
+        <Movies/>
+        
+    </Container>
+  )
+}
+
+export default Home
+
+const Container = styled.main`
+
+position: relative;
+min-height: calc(100vh - 250px);
+overflow-x: hidden;
+display: block;
+top: 72px;
+padding: 0 calc(3.5vw + 5px);
+&:after {
+  background: url("/images/home-background.png") center center / cover
+    no-repeat fixed;
+  content: "";
+  position: absolute;
+  inset: 0px;
+  opacity: 1;
+  z-index: -1;
+}`
+
+
+
+
+
